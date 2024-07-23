@@ -1,0 +1,251 @@
+<html>
+
+<head>
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js"></script>
+    <style>
+      label{
+        font-size: 20px;
+        font-weight: bold;
+      }
+      #navbutton{
+                  background-color: transparent;
+                  border: none;
+                  color: gainsboro;
+          }
+    </style>
+    <script>
+        var module=angular.module("mymodule",[]);
+        var controller=module.controller("mycontroller",function($scope,$http)
+        {
+            $scope.findInflu=function(fields){
+                let url="/find-influ?fields="+fields;
+                $http.get(url).then(allIsWell,notWell);
+                function allIsWell(response)
+                {
+                    $scope.jsonArrayInflu=response.data;
+                }
+                function notWell(err)
+                {
+                     alert(err)
+                }
+            }
+            $scope.dofind=function(fields,city)
+            {
+                let url="/do-find?fields="+fields+"&city="+city;
+                $http.get(url).then(allIsWell,notWell);
+                function allIsWell(response)
+                {
+                    $scope.jsonArrybyfun=response.data;
+                }
+                function notWell(err)
+                {
+                     alert(err)
+                }
+           }
+           $scope.dofindbyname = function(iname)
+              {
+                let url="/do-findbyiname?iname="+iname;
+
+                $http.get(url).then(allIsWell,notWell);
+                function allIsWell(response)
+                {
+                    $scope.jsonArrybyfun=response.data;
+                    alert(JSON.stringify(response.data));
+                }
+                function notWell(err)
+                {
+                    alert(err)
+                }
+              }
+           $scope.showinfo=function(index)
+           {
+            alert(index);
+            $scope.fulldetailobj=$scope.jsonArrybyfun[index];
+           }
+        })
+    </script>
+    <script>
+      function doLogout()
+      {
+        localStorage.removeItem("activeuser");
+        location.href="index.html"
+      }
+    </script>
+</head>
+<body ng-app="mymodule" ng-controller="mycontroller" style="background-color: slategrey;">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top" data-bs-theme="dark">
+    <div class="container-fluid" >
+      <a class="navbar-brand" href="#">
+        <img src="pics/000.png" alt="" style="width: 55px; height: 55px; border-radius: 10px;">
+      </a>
+      <h3 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;color: azure;margin-left: 50px;">ICONIC FACE</h3>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <center>
+        <button type="button" class="btn btn-outline-info" id="navbutton" onclick="doLogout();">Log Out</button>
+      </center>
+    </div>
+  </nav>
+    <center>
+        <h3 style="margin-top: 90px;font-size: 20px;font-family:cursive;font-weight: bolder;color: aliceblue;">Find Influencer </h3>
+        <div class="container">
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <label for="inputFields" class="col-form-label" >Fields</label>
+                </div>
+                <div class="col-auto">
+                    <select class="form-select" aria-label="Default select example" multiple
+                        aria-label="Multiple select example" ng-model="fields" ng-change="findInflu(fields);">
+                        <option value="">Choose Field</option>
+                        <option value="Fashion and Beauty">Fashion and Beauty</option>
+                        <option value="Health and Fitness">Health and Fitness</option>
+                        <option value="Travel">Travel</option>
+                        <option value="Food">Food</option>
+                        <option value="Cooking">Cooking</option>
+                        <option value="Gaming">Gaming</option>
+                        <option value="Art and Design">Art and Design</option>
+                        <option value="Photography">Photography</option>
+                        <option value="Dance">Dance</option>
+                        <option value="Music">Music</option>
+                        <option value="Vloggers">Vloggers</option>
+                        <option value="Entertainment">Entertainment</option>
+                    </select>
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="col-md-4">
+                    <label for="inputCity" class="form-label">City</label>
+                    <select class="form-select" ng-model="city" required>
+                      <option value="none">Choose...</option>
+                      <option ng-repeat="obj in jsonArrayInflu" value="{{obj.city}}">{{obj.city}}</option>
+                    </select>
+                </div>
+                       <div class="col-md-4">
+                          <button type="button" class="btn btn-outline-info" style="margin-top: 41px;" ng-click="dofind(fields,city);">Find Now</button>
+                      </div>
+                        <br>
+                        <br>
+                        <br>
+
+                        <div class="row g-3 align-items-center">
+                            <div class="col-auto">
+                              <label for="inputPassword6" class="col-form-label">Name</label>
+                            </div>
+                            <div class="col-auto">
+                              <input type="text" class="form-control" aria-describedby="passwordHelpInline" ng-model="iname">
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-outline-info" ng-click="dofindbyname(iname);">Search by Name</button>
+                            </div>
+                            
+                          </div>
+                    </div>
+                    
+                    <center>
+                        <h2>CARDS</h2>
+                    </center>
+                    
+                    <div class="row">
+                        <div class="col-md-3" ng-repeat="obj in jsonArrybyfun">
+                            <div class="card mt-5">
+                              <center>  <img src="uploads/{{obj.picpath}}"  alt="..." height="40%" width="40%"></center>
+                                <div class="card-body">
+                                  <h5 class="card-title">Name: {{obj.iname}}</h5>
+                                  <h5 class="card-title">Gender: {{obj.gender}}</h5>
+                                  <h5 class="card-title">Ig: {{obj.insta}}</h5>
+                                  <h5 class="card-title">City: {{obj.city}}</h5>            
+                                  <center><input type="button" data-bs-toggle="modal" data-bs-target="#FullModal"
+                                     class="btn btn-primary" ng-click="showinfo($index);" value="More Info"></center>
+                                </div>
+                              </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="FullModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="border:1px solid black" >
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">Know Me</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <div 
+                          style="
+                          width:inherit;
+                          height:180px;">
+                          <div>
+                            <img src="uploads/{{fulldetailobj.picpath}}" width="150" height="150" style="float:left">
+                          </div>
+                          <div style=" margin-left:170px;">
+                            <h3>{{fulldetailobj.iname}}</h3>
+                            <h5>{{fulldetailobj.fields}}</h5>
+                            <br>
+                            <button type="button" class="btn btn-outline-primary">
+                              Contact</button>
+                            </div>
+                          
+                          </div>
+                          <div style="
+                          width:450px;
+                          height:430px;
+                          float:left;">
+                              <p><h6>Full Name:</h6><h8>{{fulldetailobj.iname}}</h8></p>
+                              <p><h6>DOB:</h6><h8>{{fulldetailobj.dob}}</h8></p>
+                              <p><h6>Email:</h6><h8>{{fulldetailobj.email}}</h8></p>
+                              <p><h6>Phone:</h6><h8>{{fulldetailobj.contact}}</h8></p>
+                              <p><h6>City:</h6><h8>{{fulldetailobj.city}}</h8></p>
+                              <p><h6>Address:</h6><h8>{{fulldetailobj.address}}</h8></p>
+            
+                             
+            
+                              <div>
+                                <div style="float:left;margin-left:10px; ">
+                                     
+                             <a href="{{fulldetailobj.insta}}">
+                              <i class="fa-brands fa-instagram" style="color: #e449ca; font-size:30px;"></i>
+                             </a>
+                              <label for="inputCity" class="form-label">Insta</label> 
+                                 </div>
+                                
+                
+                                  <div style="float:left;margin-left: 30px;;">
+                                   
+                                    <a href="{{fulldetailobj.youtube}}">
+                                      <i class="fa-brands fa-youtube" style="color: #f00509;  font-size:30px;"></i>
+                                    </a>
+                                    <label for="inputCity" class="form-label">Youtube</label>
+                                   </div>
+                              
+                            </div>
+            
+                          </div>
+                          
+                          <br>
+            
+                       
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>    
+            </div>
+        </div>
+    </center>
+
+</body>
+
+</html>

@@ -1,0 +1,215 @@
+<html>
+
+<head>
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <style>
+      label{
+        color: darkblue;
+      }
+      #navbutton{
+                  background-color: transparent;
+                  border: none;
+                  color: gainsboro;
+          }
+    </style>
+  <script>
+    $(document).ready(function () {
+      let active=localStorage.getItem("activeuser");
+      $("#bemail").val(active).prop("readonly",true);
+      $("#btnbook").click(function () {
+        let obj = {
+          type: "get",
+          url: "/save-booking",
+          data: {
+            bemail: $("#bemail").val(),
+            btitle: $("#btitle").val(),
+            bdate: $("#bdate").val(),
+            btime: $("#btime").val(),
+            bcity: $("#bcity").val(),
+            bvenue: $("#bvenue").val()
+          }
+        }
+        $.ajax(obj).done(function (resp) {
+          alert("Saved");
+        }).fail(function (err) {
+          alert(err.statusText);
+        })
+      })
+      $("#btnsettingupdate").click(function(){
+        let obj2={
+          type : "get",
+          url:"/update-setting",
+          data:{
+            txtemail:$("#txtemail").val(),
+            txtOld:$("#txtOld").val(),
+            txtNew:$("#txtNew").val(),
+            txtRep:$("#txtRep").val(),
+          }
+        }
+        $.ajax(obj2).done(function(resp){
+          alert("Updated Sucesfully.....");
+
+        }).fail(function(err){
+          alert(err.statusText);
+        })
+      })
+    })
+  </script>
+  <script>
+    function doLogout()
+    {
+      localStorage.removeItem("activeuser");
+      location.href="index.html"
+    }
+  </script>
+</head>
+
+<body style="background-color: steelblue;">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="pics/000.png" alt="" style="width: 55px; height: 55px; border-radius: 10px;">
+      </a>
+      <h3 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;color: azure;margin-left: 50px;">ICONIC FACE</h3>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <center>
+        <button type="button" class="btn btn-outline-info" id="navbutton" onclick="doLogout();">Log Out</button>
+      </center>
+    </div>
+  </nav>
+  <center>
+    <div>
+      <h3 style="margin-top: 90px;color: azure;">INFLUENCER PAGE</h3>
+    </div>
+  </center>
+  <div class="container">
+  <div class="card" style="width: 18rem; float: left;margin-top: 20px;margin-left:20px">
+    <img src="pics/user-blue-gradient_78370-4692.avif" style="height: 300px;" class="card-img-top" alt="...">
+    <div class="card-body">
+      <center><a href="/inf-profile" class="btn btn-primary">PROFILE</a></center>
+    </div>
+  </div>
+  <div class="card" style="width: 18rem; float: left;margin-left: 10px;margin-top: 20px;">
+    <img src="pics/appointment-booking-mobile-concept_23-2148570788.avif" height="300px" class="card-img-top"
+      alt="...">
+    <div class="card-body">
+      <center><button type="button" class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#bookingmodal">BOOKINGS</button></center>
+    </div>
+  </div>
+  <div class="card" style="width: 18rem; float: left;margin-top: 20px;margin-left: 20px;">
+    <img src="pics/professional-businesspeople-working-together_24877-55990.avif" height="300px" class="card-img-top" alt="...">
+    <div class="card-body">
+      <center><a href="/events-manager" class="btn btn-primary">EVENT MANAGER</a></center>
+    </div>
+  </div>
+  <div class="card" style="width: 18rem; float: left;margin-left: 10px;margin-top: 20px;">
+    <img src="pics/illustration-cogwheel_53876-6326.avif" height="300px" class="card-img-top" alt="...">
+    <div class="card-body">
+      <center><button type="button" class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#settingmodal">SETTINGS</button></center>
+    </div>
+  </div>
+</div>
+  <div class="modal fade" id="bookingmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="staticBackdropLabel" style="font-weight: bolder;font-family: cursive;">Booked Events</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col">
+              <label for="inputEmail4" class="form-label">Email</label>
+              <input type="email" class="form-control" placeholder="Email ID" aria-label="Email ID" name="bemail"
+                id="bemail">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="inputevent4" class="form-label">Event Title</label>
+              <input type="text" class="form-control" placeholder="Event Title" aria-label="Event Title" name="btitle"
+                id="btitle">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="inputdate4" class="form-label">Date</label>
+              <input type="date" class="form-control" aria-label="Date" name="bdate" id="bdate">
+            </div>
+            <div class="col">
+              <label for="inputtime4" class="form-label">Time</label>
+              <input type="time" class="form-control" aria-label="Start Time" name="btime" id="btime">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="inputcity4" class="form-label">City</label>
+              <input type="text" class="form-control" aria-label="City" name="bcity" id="bcity">
+            </div>
+            <div class="col">
+              <label for="inputvenue4" class="form-label">Venue</label>
+              <input type="text" class="form-control" aria-label="Venue" name="bvenue" id="bvenue">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" name="btnbook" id="btnbook">Post Event</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="settingmodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel" style="font-weight: bolder;font-family: cursive;">Settings</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label">Email address</label>
+              <input type="email" class="form-control" id="txtemail" name="txtemail" aria-describedby="emailHelp">
+              
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Old Password</label>
+              <input type="password" class="form-control" id="txtOld" name="txtOld">
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">New Password</label>
+              <input type="password" class="form-control" id="txtNew" name="txtNew">
+            </div>
+            <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label">Rep Password</label>
+              <input type="password" class="form-control" id="txtRep" name="txtRep">
+            </div>
+
+           
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"data-bs-toggle="modal" data-bs-target="#settingmodal" id="btnsettingupdate" name="btnsettingupdate">Update</button>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
